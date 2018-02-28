@@ -10,7 +10,7 @@ source $HELPER_SCRIPTS/apt.sh
 source $HELPER_SCRIPTS/document.sh
 
 DOCKER_PACKAGE=docker-ce
-DEFAULT_DOCKER_IMAGE=microsoft/vsts-agent:ubuntu-16.04-docker-17.03.0-ce-standard
+DEFAULT_DOCKER_IMAGE=microsoft/vsts-agent:ubuntu-16.04-docker-17.12.0-ce-standard
 
 ## Check to see if docker is already installed
 echo "Determing if Docker ($DOCKER_PACKAGE) is installed"
