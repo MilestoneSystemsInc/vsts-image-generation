@@ -48,7 +48,9 @@ else {
 }
 
 # Insatll Windows .NET Features
-Install-WindowsFeature -Name NET-Framework-Features -IncludeAllSubFeature
+#should be the basic line but this fails if you don't give a source
+#Install-WindowsFeature -Name NET-Framework-Features -IncludeAllSubFeature
+Install-WindowsFeature -Name NET-Framework-Features -IncludeAllSubFeature -Source "D:\sources\sxs"
 Install-WindowsFeature -Name NET-Framework-45-Features -IncludeAllSubFeature
 Install-WindowsFeature -Name BITS -IncludeAllSubFeature
 Install-WindowsFeature -Name DSC-Service
