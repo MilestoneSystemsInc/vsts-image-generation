@@ -15,14 +15,14 @@
             <DriverPaths>
                 <PathAndCredentials wcm:keyValue="1" wcm:action="add">
                     <!-- Start floppy for drivers -->
-                    <Path>a:\</Path> 
+                    <Path>a:\</Path>
                     <!-- Finish floppy for drivers -->
                     <!-- Start cdrom for drivers
-                    <Path>f:\</Path> 
+                    <Path>f:\</Path>
                     Finish cdrom for drivers -->
                 </PathAndCredentials>
             </DriverPaths>
-        </component>    
+        </component>
         <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <!-- Start Non UEFI -->
             <DiskConfiguration>
@@ -94,10 +94,10 @@
                             <Order>3</Order>
                             <Size>128</Size>
                             <Type>MSR</Type>
-                        </CreatePartition>         
+                        </CreatePartition>
                         <CreatePartition wcm:action="add">
                             <Order>4</Order>
-                            <Extend>true</Extend> 
+                            <Extend>true</Extend>
                             <Type>Primary</Type>
                         </CreatePartition>
                     </CreatePartitions>
@@ -165,7 +165,7 @@
             <OEMInformation>
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
-            <ComputerName>nl-ams-basebox1</ComputerName>
+            <ComputerName>BuildBox1</ComputerName>
             <TimeZone>Coordinated Universal Time</TimeZone>
             <RegisteredOwner />
         </component>
@@ -189,9 +189,9 @@
             <POLICYProxySettingsPerUser>0</POLICYProxySettingsPerUser>
             <HKLMProxyEnable>true</HKLMProxyEnable>
             <HKLMProxyServer>cachingproxy:3142</HKLMProxyServer>
-        </component>    
-        Finish Setup cache proxy during installation --> 
-        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> 
+        </component>
+        Finish Setup cache proxy during installation -->
+        <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <OOBE>
                 <HideEULAPage>true</HideEULAPage>
                 <HideLocalAccountScreen>true</HideLocalAccountScreen>
@@ -224,11 +224,11 @@
             <AutoLogon>
                 <Password>
                     <Value>vagrant</Value>
-                    <PlainText>true</PlainText>                    
+                    <PlainText>true</PlainText>
                 </Password>
                 <Enabled>true</Enabled>
                 <Username>vagrant</Username>
-            </AutoLogon>			
+            </AutoLogon>
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd /c > c:\windows\temp\01-PowershellExecutionPolicy32.txt 2>$1 (powershell -Command "$ErrorActionPreference = 'Stop';$ProgressPreference='SilentlyContinue';Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force")</CommandLine>
@@ -247,7 +247,7 @@
                     <Description>Network prompt</Description>
                     <Order>3</Order>
                     <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>               
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd /c > c:\windows\temp\04-fixnetwork.txt 2>$1 (FOR %i IN (A B C D E F G H I J K L N M O P Q R S T U V W X Y Z) DO IF EXIST %i:\fixnetwork.ps1 (powershell -executionpolicy bypass -noprofile -File %i:\fixnetwork.ps1 ))</CommandLine>
                     <Description>Fix public network</Description>
@@ -261,7 +261,7 @@
                     <Description>Enable WinRm</Description>
                     <Order>5</Order>
                     <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>                          
+                </SynchronousCommand>
 
                 <!-- FIREWALL SETTINGS -->
                 <SynchronousCommand wcm:action="add">
@@ -281,7 +281,7 @@
                     <Description>Win RM port open</Description>
                     <Order>32</Order>
                     <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>               
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd /c > c:\windows\temp\33-BoxImageCreation.txt 2>$1 (netsh advfirewall firewall add rule name="WinRM 5986" protocol=TCP dir=in localport=5986 action=allow)</CommandLine>
                     <Description>Win RM port open</Description>
@@ -293,7 +293,7 @@
                     <Description>Win RM port open</Description>
                     <Order>34</Order>
                     <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>           
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd /c > c:\windows\temp\35-BoxImageCreation.txt 2>$1 (netsh advfirewall firewall add rule name="ICMP Allow incoming V4 echo request" protocol=icmpv4:8,any dir=in action=allow) </CommandLine>
                     <Description>ICMP open for ping</Description>
@@ -357,7 +357,7 @@
                     <Order>96</Order>
                     <Description>Configure WSUS Server</Description>
                     <RequiresUserInput>true</RequiresUserInput>
-                </SynchronousCommand>                  
+                </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>cmd /c > c:\windows\temp\97-set-power-config.txt 2>$1 (FOR %i IN (A B C D E F G H I J K L N M O P Q R S T U V W X Y Z) DO IF EXIST %i:\set-power-config.ps1 (powershell -executionpolicy bypass -noprofile -File %i:\set-power-config.ps1 ))</CommandLine>
                     <Order>97</Order>
@@ -376,7 +376,7 @@
                     <Order>99</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
-            </FirstLogonCommands>	
+            </FirstLogonCommands>
         </component>
     </settings>
     <settings pass="offlineServicing">

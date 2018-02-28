@@ -165,7 +165,7 @@
             <OEMInformation>
                 <HelpCustomized>false</HelpCustomized>
             </OEMInformation>
-            <ComputerName>nl-ams-basebox1</ComputerName>
+            <ComputerName>BuildBox1</ComputerName>
             <TimeZone>GMT Standard Time</TimeZone>
             <RegisteredOwner />
         </component>
