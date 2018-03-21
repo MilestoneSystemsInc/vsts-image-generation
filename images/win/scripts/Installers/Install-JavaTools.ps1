@@ -47,9 +47,9 @@ setx JAVA_HOME_9_X64 $latestJava9Install /M
 $userSid = (Get-WmiObject win32_useraccount -Filter "name = '$env:USERNAME' AND domain = '$env:USERDOMAIN'").SID
 $userEnvironmentKey = 'Registry::HKEY_USERS\' + $userSid + '\Environment'
 
-$m2 = (Get-ItemProperty -Path $userEnvironmentKey -Name M2).M2
 $m2_home = (Get-ItemProperty -Path $userEnvironmentKey -Name M2_HOME).M2_HOME
-$maven_opts = (Get-ItemProperty -Path $userEnvironmentKey -Name MAVEN_OPTS).MAVEN_OPTS
+$m2 = $m2_home + '\bin'
+$maven_opts = '-Xms256m'
 
 $m2_repo = 'C:\ProgramData\m2'
 New-Item -Path $m2_repo -ItemType Directory -Force

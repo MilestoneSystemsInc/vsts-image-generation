@@ -23,7 +23,7 @@ function Get-WixExtensionPackage {
         exit 1
     }
 
-    $stateContent = Get-Content -Path ($instanceFolders.FullName + '\state.json')
+    $stateContent = Get-Content -Path ($instanceFolders.FullName + '\state.packages.json')
     $state = $stateContent | ConvertFrom-Json
     $WixPackage = $state.packages | where { $_.id -eq "WixToolset.VisualStudioExtension.Dev15" }
     return $WixPackage

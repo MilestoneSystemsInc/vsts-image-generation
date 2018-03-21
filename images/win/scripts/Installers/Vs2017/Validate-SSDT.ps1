@@ -16,7 +16,7 @@ function Get-SSDTExtensionPackage {
         exit 1
     }
 
-    $stateContent = Get-Content -Path ($instanceFolders.FullName + '\state.json')
+    $stateContent = Get-Content -Path ($instanceFolders.FullName + '\state.packages.json')
     $state = $stateContent | ConvertFrom-Json
     $SsdtPackage = $state.packages | where { $_.id -eq "SSDT" }
     return $SsdtPackage

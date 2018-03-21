@@ -4,7 +4,8 @@
 ##  Desc:  Install Mozilla Firefox
 ################################################################################
 
-choco install firefox
+$version = "58.0.2"
+choco install firefox --version $version
 
 $path = '{0}\Program Files\Mozilla Firefox\' -f $env:SystemDrive;
 New-Item -path $path -Name 'mozilla.cfg' -Value '//

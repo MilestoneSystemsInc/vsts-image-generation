@@ -12,6 +12,14 @@ function Disable-InternetExplorerESC {
     Stop-Process -Name Explorer -Force -ErrorAction Continue
     Write-Host "IE Enhanced Security Configuration (ESC) has been disabled."
 }
+
+function Disable-InternetExplorerWelcomeScreen {
+    $AdminKey = "HKLM:\Software\Policies\Microsoft\Internet Explorer\Main"
+    New-Item -Path $AdminKey -Value 1 -Force
+    Set-ItemProperty -Path $AdminKey -Name "DisableFirstRunCustomize" -Value 1 -Force
+    Write-Host "Disabled IE Welcome screen"
+}
+
 function Disable-UserAccessControl {
     Set-ItemProperty "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "ConsentPromptBehaviorAdmin" -Value 00000000 -Force
     Write-Host "User Access Control (UAC) has been disabled."
@@ -40,6 +48,9 @@ Install-WindowsFeature -Name DSC-Service
 
 Write-Host "Disable UAC"
 Disable-UserAccessControl
+
+Write-Host "Disable IE Welcome Screen"
+Disable-InternetExplorerWelcomeScreen
 
 Write-Host "Disable IE ESC"
 Disable-InternetExplorerESC
