@@ -21,7 +21,7 @@ function Install-MSI
         Write-Host "Downloading $MsiName..."
         $FilePath = "${env:Temp}\$MsiName"
 
-        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        # [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         Invoke-WebRequest -Uri $MsiUrl -OutFile $FilePath
 
         $Arguments = ('/i', $FilePath, '/QN', '/norestart' )
