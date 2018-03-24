@@ -10,7 +10,7 @@ $uri = 'https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.21-winx64.zip'
 $mysqlPath = 'C:\mysql-5.7.21-winx64\bin'
 
 # Installing visual c++ redistibutable package.
-$InstallerURI = 'http://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe'
+$InstallerURI = 'https://download.microsoft.com/download/0/5/6/056dcda9-d667-4e27-8001-8a0c6971d6b1/vcredist_x64.exe'
 $InstallerName = 'vcredist_x64.exe'
 $ArgumentList = ('/install', '/quiet', '/norestart' )
 
