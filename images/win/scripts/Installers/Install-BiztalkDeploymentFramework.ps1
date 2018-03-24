@@ -1,10 +1,11 @@
 ################################################################################
 ##  File:  Install-BiztalkDeploymentFramework.ps1
-##  Team:  Automated Testing
-##  Desc:  Install Biztalk DeploymentFramework
+##  Team:  Black Marble
+##  Desc:  Install Biztalk DeploymentFramework, Requires Biztalk to be installed
 ################################################################################
 
-# Can't us the standard version as need extra attribute
+# Can't us the standard version of helper as need extra TLS attribute
+# Might move this to main helper latter if proves to be need elsewhere
 #Import-Module -Name ImageHelpers -Force
 function Install-MSI
 {
