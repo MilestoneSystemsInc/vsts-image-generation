@@ -11,16 +11,20 @@ try
     # As there seems to be no MS store for this file we keep a ZIP'd copy on an internally
     # accessible share. We chose a ZIP as opposed to the ISO to reduce size and unpack
     # complexity
+    Write-Host "Installing Biztalk2016"
 
     $InstallerURI = 'https://arbiter.blackmarble.co.uk/BizTalk\BiztalkServer2016.zip'
     $InstallerName = 'BiztalkServer2016.zip'
     $ArgumentList = ('/ADDLOCAL ALL', '/quiet', '/norestart' )
 
     $folder = "${env:Temp}\BizTalk"
-    Write-Host "Downloading $InstallerNam to folder $folder"
+    Write-Host "Downloading $InstallerName to folder $folder"
     $zipfile = "${env:Temp}\$InstallerName"
 
-    Invoke-WebRequest -Uri $InstallerURI -OutFile $zipfile
+    # Not using invoke-webrequest as seems to time out
+    # Invoke-WebRequest -Uri $InstallerURI -OutFile $zipfile
+    $wc = New-Object System.Net.WebClient
+    $wc.DownloadFile($InstallerURI , $zipFile)
 
     Write-Host "Unzipping the file"
     Expand-Archive -Path $zipfile -DestinationPath $folder -Force
@@ -28,6 +32,17 @@ try
     Write-Host "Starting Install $InstallerName..."
     $process = Start-Process -FilePath "$folder\setup.exe" -ArgumentList $ArgumentList -Wait -PassThru
     $exitCode = $process.ExitCode
+
+    $SoftwareName = "Biztalk 2016"
+    $Description = @"
+    _Version:_ 3.12.174<br/>
+    _Location:_ C:\Program Files (x86)\Microsoft BizTalk Server 2016
+
+    A Full installation has been performed of Biztalk 2016 Developer Edition
+
+"@
+
+    Add-SoftwareDetailsToMarkdown -SoftwareName $SoftwareName -DescriptionMarkdown $Description
 
     if ($exitCode -eq 0 -or $exitCode -eq 3010)
     {

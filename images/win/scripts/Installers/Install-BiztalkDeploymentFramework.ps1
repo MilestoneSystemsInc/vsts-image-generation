@@ -31,6 +31,16 @@ function Install-MSI
         $process = Start-Process -FilePath msiexec.exe -ArgumentList $Arguments -Wait -PassThru
         $exitCode = $process.ExitCode
 
+        $SoftwareName = "Biztalk Deployment Framework"
+        $Description = @"
+        _Version:_ ?<br/>
+        _Location:_ ?
+
+        A Full installation has been performed of Biztalk Deployment Framework
+"@
+
+        Add-SoftwareDetailsToMarkdown -SoftwareName $SoftwareName -DescriptionMarkdown $Description
+
         if ($exitCode -eq 0 -or $exitCode -eq 3010)
         {
             Write-Host -Object 'Installation successful'

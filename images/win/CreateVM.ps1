@@ -1,1 +1,1 @@
-& "C:\Users\fez\OneDrive\Tools\packer.exe" build -on-error=ask vs2017-Server2016-HyperV.json
+& "C:\ProgramData\chocolatey\lib\packer\tools\packer.exe" build -force -on-error=ask vs2017-Server2016-HyperV.json

@@ -1,0 +1,142 @@
+{
+    "variables": {
+      "vm_name": "Test1",
+      "cpu": "2",
+      "ram_size": "2048",
+      "disk_size": "153600",
+      "disk_additional_size": "204800",
+      "iso_checksum": "772700802951b36c8cb26a61c040b9a8dc3816a3",
+      "iso_url": "http://care.dlservice.microsoft.com/dl/download/1/4/9/149D5452-9B29-4274-B6B3-5361DBDA30BC/14393.0.161119-1705.RS1_REFRESH_SERVER_EVAL_X64FRE_EN-US.ISO",
+      "iso_checksum_type": "sha1",
+      "hyperv_switchname": "Default Switch",
+      "install_user" : "vagrant",
+      "install_password" : "vagrant",
+
+      "image_folder": "C:\\image",
+      "commit_file": "C:\\image\\commit.txt",
+      "metadata_file": "C:\\image\\metadata.txt",
+      "helper_script_folder": "C:\\Program Files\\WindowsPowerShell\\Modules\\",
+      "commit_id": "LATEST"
+    },
+    "builders": [
+    {
+      "vm_name":"{{user `vm_name`}}",
+      "type": "hyperv-iso",
+      "disk_size": "{{user `disk_size`}}",
+      "disk_additional_size": "{{user `disk_additional_size`}}",
+      "floppy_files": [],
+      "secondary_iso_images": [
+        "./answersISO/windows-2016-serverstandard-amd64/answer.iso"
+      ],
+      "http_directory": "./windows/common/http/",
+      "boot_wait": "0s",
+      "boot_command": [
+        "a<enter><wait>a<enter><wait>a<enter><wait>a<enter>"
+      ],
+      "guest_additions_mode":"disable",
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "communicator":"winrm",
+      "winrm_username": "{{user `install_user`}}",
+      "winrm_password": "{{user `install_password`}}",
+      "winrm_timeout" : "4h",
+      "shutdown_command": "IF EXIST a:\\run-sysprep.cmd (CALL a:\\run-sysprep.cmd) ELSE (IF EXIST e:\\run-sysprep.cmd (CALL e:\\run-sysprep.cmd) ELSE (CALL f:\\run-sysprep.cmd)) &IF \"%ERRORLEVEL%\" == \"0\" (ECHO \"Shutdown script succeeded with exit code = %ERRORLEVEL%\" &EXIT 0) ELSE (ECHO \"Shutdown script failed with exit code = %ERRORLEVEL%\" &EXIT %ERRORLEVEL%)",
+      "ram_size": "{{user `ram_size`}}",
+      "cpu": "{{user `cpu`}}",
+      "generation": 2,
+      "switch_name":"{{user `hyperv_switchname`}}",
+      "enable_secure_boot":true
+    }],"provisioners": [
+        {
+            "type": "powershell",
+            "inline":[
+                "Get-Disk |",
+                "Where partitionstyle -eq 'raw' |",
+                "Initialize-Disk -PartitionStyle MBR -PassThru |",
+                "New-Partition -AssignDriveLetter -UseMaximumSize |",
+                "Format-Volume -FileSystem NTFS -NewFileSystemLabel 'Source' -Confirm:$false"
+            ]
+        },
+      {
+          "type": "powershell",
+          "inline":[
+              "New-Item -Path {{user `image_folder`}} -ItemType Directory -Force",
+              "Write-Output {{user `commit_id`}} > {{user `commit_file`}}",
+              "Write-Host (Get-Content -Path {{user `commit_file`}})"
+          ]
+      },
+      {
+          "type": "file",
+          "source": "{{ template_dir }}/scripts/ImageHelpers",
+          "destination": "{{user `helper_script_folder`}}"
+      },
+      {
+          "type": "windows-shell",
+          "inline": [
+              "net user {{user `install_user`}} {{user `install_password`}} /add /passwordchg:no /passwordreq:yes /active:yes" ,
+              "net localgroup Administrators {{user `install_user`}} /add",
+              "winrm set winrm/config/service/auth @{Basic=\"true\"}",
+              "winrm get winrm/config/service/auth"
+          ]
+      },
+      {
+          "type": "powershell",
+          "scripts":[
+              "{{ template_dir }}/scripts/Installers/Vs2017/Initialize-VM.ps1"
+          ]
+      },
+      {
+          "type": "windows-restart",
+          "restart_timeout": "30m"
+      },
+      {
+        "type": "powershell",
+        "valid_exit_codes": [
+            0,
+            3010
+        ],
+        "scripts":[
+            "{{ template_dir }}/scripts/Installers/Vs2015/Install-VS2015.ps1"
+        ]
+    },
+    {
+        "type": "windows-restart",
+        "restart_timeout": "30m"
+    },
+    {
+        "type": "powershell",
+        "scripts":[
+            "{{ template_dir }}/scripts/Installers/Install-Biztalk2016.ps1"
+        ]
+    },
+    {
+        "type": "powershell",
+        "scripts":[
+            "{{ template_dir }}/scripts/Installers/Install-BiztalkDeploymentFramework.ps1"
+        ]
+    },
+      {
+          "type": "file",
+          "source": "C:\\InstalledSoftware.md",
+          "destination": "{{ template_dir }}/InstalledSoftware.md",
+          "direction": "download"
+      },
+      {
+          "type": "powershell",
+          "scripts":[
+              "{{ template_dir }}/scripts/Installers/Finalize-VM.ps1"
+          ]
+      },
+      {
+          "type": "windows-restart",
+          "restart_timeout": "30m"
+      },
+      {
+          "type": "powershell",
+          "scripts":[
+              "{{ template_dir }}/scripts/Installers/Vs2017/Run-Antivirus.ps1"
+          ]
+      }
+  ]
+}
