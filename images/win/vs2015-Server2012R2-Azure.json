@@ -111,7 +111,7 @@
                 3010
             ],
             "scripts":[
-                "{{ template_dir }}/scripts/Installers/Install-NET471DevPack.ps1"
+                "{{ template_dir }}/scripts/Installers/Install-NET472.ps1"
             ],
             "elevated_user": "{{user `install_user`}}",
             "elevated_password": "{{user `install_password`}}",
@@ -138,7 +138,7 @@
         {
             "type": "powershell",
             "scripts":[
-                "{{ template_dir }}/scripts/Installers/Validate-NET471.ps1"
+                "{{ template_dir }}/scripts/Installers/Validate-NET472.ps1"
             ]
         },
         {
@@ -304,6 +304,12 @@
                 "{{ template_dir }}/scripts/Installers/Install-AzureModules.ps1"
             ]
         },
+	{
+            "type": "powershell",
+            "scripts":[
+                "{{ template_dir }}/scripts/Installers/Update-DotnetTLS.ps1"
+            ]
+        },
         {
             "type": "windows-restart",
             "restart_timeout": "30m"
@@ -398,6 +404,12 @@
                 "{{ template_dir }}/scripts/Installers/Validate-MysqlCli.ps1"
             ]
         },
+	{
+            "type": "powershell",
+            "scripts":[
+                "{{ template_dir }}/scripts/Installers/Validate-DotnetTLS.ps1"
+            ]
+        },
         {
             "type": "powershell",
             "scripts":[
@@ -411,7 +423,7 @@
         {
             "type": "powershell",
             "inline": [
-                "if( Test-Path $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml ){ rm $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml -Force}",
+                "if( Test-Path $Env:SystemRoot\\System32\\Sysprep\\unattend.xml ){ rm $Env:SystemRoot\\System32\\Sysprep\\unattend.xml -Force}",
                 "& $Env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /shutdown /quiet"
             ]
         }

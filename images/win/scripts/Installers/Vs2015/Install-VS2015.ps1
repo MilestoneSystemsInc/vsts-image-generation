@@ -7,7 +7,6 @@
 Import-Module -Name ImageHelpers -Force
 
 $InstallerURI = 'https://download.microsoft.com/download/c/a/c/cac076be-2940-4a9e-ad8a-040996fbc7fc/vs_enterprise.exe'
-
 $InstallerName = 'vs_Enterprise.exe'
 $ArgumentList = ('/Full', '/Quiet', '/NoRestart' )
 $exitCode = Install-EXE -Url $InstallerURI -Name $InstallerName -ArgumentList $ArgumentList
@@ -17,16 +16,5 @@ $regKey = "HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 $installedApplications = Get-ItemProperty -Path $regKey
 $VisualStudioVersion = ($installedApplications | Where-Object { $_.DisplayName -and $_.DisplayName.toLower().Contains("visual studio enterprise") } | Select-Object -First 1).DisplayVersion
 Write-Host "Visual Studio version" $VisualStudioVersion "installed"
-
-$SoftwareName = "Visual Studio 2015 Enterprise"
-$Description = @"
-_Version:_ 14.0.23107.178<br/>
-_Location:_ C:\Program Files (x86)\Microsoft Visual Studio 14.0
-
-A Full installation has been performed of Visual Studio 2015 Enterprise
-
-"@
-
-Add-SoftwareDetailsToMarkdown -SoftwareName $SoftwareName -DescriptionMarkdown $Description
 
 exit $exitCode

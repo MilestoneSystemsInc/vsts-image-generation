@@ -48,9 +48,7 @@ else {
 }
 
 # Insatll Windows .NET Features
-#should be the basic line but this fails if you don't give a source
-#Install-WindowsFeature -Name NET-Framework-Features -IncludeAllSubFeature
-Install-WindowsFeature -Name NET-Framework-Features -IncludeAllSubFeature -Source "D:\sources\sxs"
+Install-WindowsFeature -Name NET-Framework-Features -IncludeAllSubFeature
 Install-WindowsFeature -Name NET-Framework-45-Features -IncludeAllSubFeature
 Install-WindowsFeature -Name BITS -IncludeAllSubFeature
 Install-WindowsFeature -Name DSC-Service
@@ -113,3 +111,19 @@ Components marked with **\*** have been upgraded since the previous version of t
 "@
 
 Add-ContentToMarkdown -Content $Content
+
+
+$SoftwareName = "Chocolatey"
+
+if( $( $(choco version) | Out-String) -match  'Chocolatey v(?<version>.*).*' )
+{
+   $chocoVersion = $Matches.version.Trim()
+}
+
+$Description = @"
+_Version:_ $chocoVersion<br/>
+_Environment:_
+* PATH: contains location for choco.exe
+"@
+
+Add-SoftwareDetailsToMarkdown -SoftwareName $SoftwareName -DescriptionMarkdown $Description

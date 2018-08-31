@@ -18,4 +18,19 @@ AzCopy /Source:$SourceUrl /Dest:$Dest  /S /V /Pattern:$Path
 
 $ToolsDirectory = $Dest + $Path
 
+$current = Get-Location
+Set-Location -Path $ToolsDirectory
+
+Get-ChildItem -Recurse -Depth 4 -Filter install_to_tools_cache.bat | ForEach-Object {
+    Write-Host $_.DirectoryName
+    Set-Location -Path $_.DirectoryName
+    Get-Location | Write-Host
+    if (Test-Path 'tool.zip')
+    {
+        Expand-Archive 'tool.zip' -DestinationPath '.'
+    }
+    cmd.exe /c 'install_to_tools_cache.bat'
+}
+Set-Location -Path $current
+
 setx AGENT_TOOLSDIRECTORY $ToolsDirectory /M

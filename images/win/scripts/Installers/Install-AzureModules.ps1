@@ -197,36 +197,18 @@ else {
     Write-Host "The Directory is clean. There are no contents present in it"
 }
 
-#### create directories for saving the azure and azurerm modules. This will be done for Azure 3.8.0, AzureRM 3.8.0, and Azure 4.2.1 and AzureRM 4.2.1
+# Download and unzip the stored AzurePSModules from the vstsagentools public blob
 
-$pathToModule = "C:\Modules\azure_3.8.0"
-mkdir $pathToModule
-Save-Module -Name Azure -RequiredVersion 3.8.0 -Path $pathToModule -Force
+$blobUri = "https://vstsagenttools.blob.core.windows.net/tools/azurepowershellmodules/AzurePSModules.m139.20180816.32798.zip"
+$downloadLocation = "${ENV:Temp}\AzurePSModules.zip"
+$extractLocation = "C:\Modules"
 
+Write-Host "Downloading content from blob location $blobUri"
+$webClient = New-Object Net.WebClient
+$webClient.DownloadFile($blobUri, $downloadLocation)
 
+Write-Host "Unzipping Azure modules to folder $extractLocation"
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+[System.IO.Compression.ZipFile]::ExtractToDirectory($downloadLocation, $extractLocation)
 
-$pathToModule = "C:\Modules\azurerm_3.8.0"
-mkdir $pathToModule
-Save-Module -Name AzureRM -RequiredVersion 3.8.0 -Path $pathToModule -Force
-
-
-
-$pathToModule = "C:\Modules\azure_4.2.1"
-mkdir $pathToModule
-Save-Module -Name Azure -RequiredVersion 4.2.1 -Path $pathToModule -Force
-
-
-
-$pathToModule = "C:\Modules\azurerm_4.2.1"
-mkdir $pathToModule
-Save-Module -Name AzureRM -RequiredVersion 4.2.1 -Path $pathToModule -Force
-
-
-$pathToModule = "C:\Modules\azure_5.1.1"
-mkdir $pathToModule
-Save-Module -Name Azure -RequiredVersion 5.1.1 -Path $pathToModule -Force
-
-
-$pathToModule = "C:\Modules\azurerm_5.1.1"
-mkdir $pathToModule
-Save-Module -Name AzureRM -RequiredVersion 5.1.1 -Path $pathToModule -Force
+Write-Host "Successfully unzipped modules to location $extractLocation"

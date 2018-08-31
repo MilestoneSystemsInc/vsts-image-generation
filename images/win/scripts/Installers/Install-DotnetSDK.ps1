@@ -8,6 +8,8 @@
 # ensure temp
 New-Item -Path C:\Temp -Force -ItemType Directory
 
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor "Tls12"
+
 Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/dotnet/core/master/release-notes/releases.json' -UseBasicParsing -OutFile 'dotnet-releases.json'
 $dotnetReleases = Get-Content -Path 'dotnet-releases.json' | ConvertFrom-Json
 $dotnetReleases = $dotnetReleases | Sort-Object -Property 'version-runtime'
@@ -17,7 +19,8 @@ Invoke-WebRequest -Uri 'https://dot.net/v1/dotnet-install.ps1' -UseBasicParsing 
 $dotnetReleases | ForEach-Object {
     $release = $_
     $sdkVersion = $release.'version-sdk'
-    if(!$sdkVersion.Contains('preview'))
+    #Filtering dotnet sdk and runtime versions which does not have "-" in their name, based on naming pattern they are either preview or rc versions
+    if(!$sdkVersion.Contains('-'))
     {
         .\dotnet-install.ps1 -Architecture x64 -Version $sdkVersion -InstallDir $(Join-Path -Path $env:ProgramFiles -ChildPath 'dotnet')
     }

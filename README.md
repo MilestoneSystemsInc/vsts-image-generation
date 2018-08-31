@@ -1,5 +1,5 @@
 # Visual Studio Team Services Hosted Images
-![Images](/docs/ImageGenBanner.png "Images")
+![Banner](/docs/resources/ImageGenBanner.png "Banner")
 
 ## Overview
 

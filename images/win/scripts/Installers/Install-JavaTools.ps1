@@ -8,8 +8,8 @@
 choco install jdk8 -params "both=true" -y
 
 choco install jdk9 -y
+choco install jdk10 -y
 choco install ant -y
-choco install cobertura -y
 choco install maven -y
 choco install gradle -y
 
@@ -34,6 +34,9 @@ $latestJava8Install = $java8Installs.FullName;
 $java9Installs = Get-ChildItem -Path 'C:\Program Files\Java' -Filter 'jdk*9*' | Sort-Object -Property Name -Descending | Select-Object -First 1
 $latestJava9Install = $java9Installs.FullName;
 
+$java10Installs = Get-ChildItem -Path 'C:\Program Files\Java' -Filter 'jdk*10*' | Sort-Object -Property Name -Descending | Select-Object -First 1
+$latestJava10Install = $java10Installs.FullName;
+
 $newPath = [string]::Join(';', $newPathSegments)
 $newPath = $latestJava8Install + '\bin;' + $newPath
 
@@ -42,6 +45,7 @@ Set-MachinePath -NewPath $newPath
 setx JAVA_HOME $latestJava8Install /M
 setx JAVA_HOME_8_X64 $latestJava8Install /M
 setx JAVA_HOME_9_X64 $latestJava9Install /M
+setx JAVA_HOME_10_X64 $latestJava10Install /M
 
 #Move maven variables to Machine, they may not be in the environment for this script so we need to read them from the registry.
 $userSid = (Get-WmiObject win32_useraccount -Filter "name = '$env:USERNAME' AND domain = '$env:USERDOMAIN'").SID
@@ -58,3 +62,21 @@ setx M2 $m2 /M
 setx M2_HOME $m2_home /M
 setx M2_REPO $m2_repo /M
 setx MAVEN_OPTS $maven_opts /M
+
+
+
+## Downloading cobertura jars
+$uri = 'https://ayera.dl.sourceforge.net/project/cobertura/cobertura/2.1.1/cobertura-2.1.1-bin.zip'
+$coberturaPath = "C:\cobertura-2.1.1"
+
+cd $env:TEMP
+
+Invoke-WebRequest -UseBasicParsing -Uri $uri -OutFile cobertura.zip
+
+# Expand the zip
+Expand-Archive -Path cobertura.zip -DestinationPath "C:\" -Force
+
+# Deleting zip folder
+Remove-Item -Recurse -Force cobertura.zip
+
+setx COBERTURA_HOME $coberturaPath /M
